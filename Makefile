@@ -1,27 +1,34 @@
 #
 
 # Configuration
-DKRIMG := varnish-swarm
+IMG := dellelce/varnish
+IMGLITE := dellelce/varnish-lite
 
 help:
 	@echo Always use "help" as default
 
-all: varnish
+all: build
 build: varnish
 
 varnish:
-	@docker build -t $(DKRIMG) .
+	@docker build -t $(IMG) .
+
+varnishlite:
+	@docker build -t $(IMGLITE) 
 
 vashell: varnish
-	@docker run -it --rm $(DKRIMG) sh
+	@docker run -it --rm $(IMG) sh
+
+vashelllite: varnishlite
+	@docker run -it --rm $(IMGLITE) sh
 
 varun: varnish
-	@docker  run -it --rm --network $(NET) --name varnish -p 8199:80 -v "$$PWD/cfg:/etc/varnish" $(DKRIMG)
+	@docker  run -it --rm --network $(NET) --name varnish -p 8199:80 -v "$$PWD/cfg:/etc/varnish" $(IMG)
+
+varunlite: varnishlite
+	@docker  run -it --rm --network $(NET) --name varnish -p 8199:80 -v "$$PWD/cfg:/etc/varnish" $(IMGLITE)
 
 clean:
-	@docker rmi $(DKRIMG)
+	@docker rmi $(IMG) $(IMGLITE)
 
 allcycle: all clean
-
-sh: all
-
