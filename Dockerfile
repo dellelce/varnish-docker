@@ -1,6 +1,8 @@
-FROM alpine:latest as build
+FROM dellelce/varnish-base
 
-RUN apk upgrade --no-cache && apk add --no-cache varnish bash
+RUN apk add --no-cache libexecinfo
+
+ENV PATH ${PATH}:${INSTALLDIR}/sbin
 
 CMD ["/bin/sh"]
 
