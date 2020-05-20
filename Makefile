@@ -8,13 +8,13 @@ help:
 	@echo Always use "help" as default
 
 all: build
-build: varnish
+build: varnish varnishlite
 
 varnish:
 	@docker build -t $(IMG) .
 
 varnishlite:
-	@docker build -t $(IMGLITE) 
+	@docker build -t $(IMGLITE) lite
 
 vashell: varnish
 	@docker run -it --rm $(IMG) sh
@@ -27,6 +27,10 @@ varun: varnish
 
 varunlite: varnishlite
 	@docker  run -it --rm --network $(NET) --name varnish -p 8199:80 -v "$$PWD/cfg:/etc/varnish" $(IMGLITE)
+
+push: varnish varnishlite
+	@docker push $(IMG)
+	@docker push $(IMGLITE)
 
 clean:
 	@docker rmi $(IMG) $(IMGLITE)
