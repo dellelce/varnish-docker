@@ -3,6 +3,7 @@
 # Configuration
 IMG := dellelce/varnish
 IMGLITE := dellelce/varnish-lite
+VARNISHVER = $$(docker run -it --rm $(IMG) varnishd -V|awk '{ gsub(/-/," "); } FNR==1 { print $$3 } ')
 
 help:
 	@echo Always use "help" as default
@@ -11,10 +12,10 @@ all: build
 build: varnish varnishlite
 
 varnish:
-	@docker build -t $(IMG) .
+	@set -x && docker build -t $(IMG) . && docker tag $(IMG):latest $(IMG):$(VARNISHVER)
 
 varnishlite:
-	@docker build -t $(IMGLITE) lite
+	@docker build -t $(IMGLITE) lite && docker tag $(IMGLITE):latest $(IMGLITE):$(VARNISHVER)
 
 vashell: varnish
 	@docker run -it --rm $(IMG) sh
