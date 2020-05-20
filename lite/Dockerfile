@@ -8,7 +8,8 @@ FROM alpine:3.8
 COPY --from=source /sbin/varnishd /sbin/varnishd
 COPY --from=source /lib/*pcre* /lib/
 
-RUN apk add --no-cache libexecinfo
+RUN apk add --no-cache libexecinfo gcc binutils musl-dev && \
+    mkdir /var/varnish
 
 CMD ["/bin/sh"]
 
