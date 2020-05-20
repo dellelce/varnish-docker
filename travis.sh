@@ -15,24 +15,15 @@
   rc=$?
   [ $rc -ne 0 ] && { echo "docker_hub: Docker hub login failed with rc = $rc"; return $rc; }
 
-  [ ! -z "$target" ] && { docker push "$target"; return $?; }
   return 0
  }
-
-### ENV ###
-
- isdocker="$1"; shift
- image="${1:-${DOCKER_IMAGE}}"; shift
-
- prefix="${1:-${PREFIX}}"; shift
- prefix="${prefix:-/app/httpd}" # sanity check
 
 ### MAIN ###
 
  make build
 
  build_rc="$?"
- [ $build_rc -eq 0 -a ! -z "$image" ] && docker_hub "$image" && make push
+ [ $build_rc -eq 0 -a ! -z "$image" ] && docker_hub && make push
  exit $build_rc
 
 ### EOF ###
