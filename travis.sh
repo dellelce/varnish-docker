@@ -23,7 +23,8 @@
  make build
 
  build_rc="$?"
- [ $build_rc -eq 0 -a ! -z "$image" ] && docker_hub && make push
+ echo "build_rc: $build_rc"
+ [ $build_rc -eq 0 ] && docker_hub && make push
  exit $build_rc
 
 ### EOF ###
