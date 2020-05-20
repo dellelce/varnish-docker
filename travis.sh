@@ -24,7 +24,11 @@
 
  build_rc="$?"
  echo "build_rc: $build_rc"
- [ $build_rc -eq 0 ] && docker_hub && make push
+ [ $build_rc -eq 0 ] &&
+ {
+   docker_hub && make push || exit $?
+ }
+
  exit $build_rc
 
 ### EOF ###
